@@ -1,0 +1,6 @@
+{
+  "suburbs": [
+    {"suburb": "parramatta", "long": "151", "lat": "-33.82"},
+    {"suburb": "sydney", "long": "151.21", "lat": "-33.87"}
+  ]
+}

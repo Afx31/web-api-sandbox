@@ -1,40 +1,39 @@
-import React, { useState, useEffect } from 'react';
-
-
-// fetch('https://api.open-meteo.com/v1/forecast?latitude=-33.79&longitude=150.83&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m')
-//   .then((res) => res.json())
-//   .then((data) => console.log(data));
+import React, { useState } from 'react';
+import jsonData from './suburbs.json';
 
 const WeatherAPI = () => {
-  const [temp, setTemp] = useState('');
-  const [latitude, setLatitude] = useState('-33.79');
-  const [longitude, setLongitude] = useState('150.83');
-  
-  useEffect(() => {
-    //setLatitude('-33.79');
-    //setLongitude('150.83');
-    
-    testfunction();    
-  },[]);
+  const [userInput, setUserInput] = useState('');
+  const [temp, setTemp] = useState('');  
+  var testingUserInput = "sydney";
+  // maybe configurable later on for the user to search via different criteria
+  var searchBy = "suburb";
+  //var searchResults = [];
 
-  const testfunction = async () => {
-    var res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m`)
+  const APICall = async (long, lat) => {
+    var res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m`)
     var resData = await res.json();
-
-    console.log('----------')
-    console.log(resData['current_weather'])
-    console.log('----------')
     setTemp(resData['current_weather'].temperature);
   }
 
   const GetWeatherForecast = () => {
+    var searchForLatitude = '';
+    var searchForLongitude = '';
 
+    for (var i = 0; i < jsonData.suburbs.length; i++) {
+      if (jsonData.suburbs[i][searchBy] == userInput) {
+        //searchResults = jsonData.suburbs[i];
+        searchForLatitude = jsonData.suburbs[i].lat;
+        searchForLongitude = jsonData.suburbs[i].long;
+      }
+    }
+    
+    APICall(searchForLongitude, searchForLatitude);
   }
 
   return (
     <div className='component'>
       <p>Your suburb: </p>
-      <input id='suburbInput' name='suburbInput' /><br/>
+      <input id='suburbInput' type='text' name='suburbInput' onChange={e => setUserInput(e.target.value)} /><br/>
       <button type='button' onClick={GetWeatherForecast}>Get weather forecast</button>
       <p>Temperature: {temp}</p>
     </div>
