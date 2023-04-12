@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import jsonData from './suburbs.json';
+//import jsonData from './suburbsmine.json';
 
 const WeatherAPI = () => {
   const [userInput, setUserInput] = useState('');
-  const [temp, setTemp] = useState('');  
-  var testingUserInput = "sydney";
+  const [temp, setTemp] = useState('');
   // maybe configurable later on for the user to search via different criteria
   var searchBy = "suburb";
   //var searchResults = [];
@@ -14,16 +14,17 @@ const WeatherAPI = () => {
     var resData = await res.json();
     setTemp(resData['current_weather'].temperature);
   }
-
+  
   const GetWeatherForecast = () => {
     var searchForLatitude = '';
     var searchForLongitude = '';
 
-    for (var i = 0; i < jsonData.suburbs.length; i++) {
-      if (jsonData.suburbs[i][searchBy] == userInput) {
-        //searchResults = jsonData.suburbs[i];
-        searchForLatitude = jsonData.suburbs[i].lat;
-        searchForLongitude = jsonData.suburbs[i].long;
+    for (var i = 0; i < jsonData.data.length; i++) {
+      if (jsonData.data[i][searchBy] == userInput) {
+        //searchResults = jsonData.data[i];
+        console.log('Search found!!!')
+        searchForLatitude = jsonData.data[i].lat;
+        searchForLongitude = jsonData.data[i].long;
       }
     }
     
